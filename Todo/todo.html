@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .divs {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 50px;
+        text-align: center;
+        margin-right: 50%;
+      }
+
+      button {
+        border: 0px;
+        background-color: white;
+      }
+
+      #remove {
+        border: 1px solid red;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="input">
+      <label>Enter Task</label><br /><br />
+      <input type="text" id="task" required placeholder="TASK" />
+      <button onclick="todo()">Submit</button>
+    </div>
+    <div id="display"></div>
+  </body>
+</html>
+<script>
+  let todo = () => {
+    let task = document.getElementById("task").value;
+    let todo = JSON.parse(localStorage.getItem("data")) || [];
+
+    todo.push(task);
+    appendData(todo);
+
+    localStorage.setItem("data", JSON.stringify(todo));
+  };
+
+  let appendData = (todo) => {
+    let container = document.getElementById("display");
+    container.innerHTML = "";
+
+    todo.forEach((element, index) => {
+      let div = document.createElement("div");
+      div.setAttribute("class", "divs");
+
+      let p = document.createElement("p");
+      p.innerText = element;
+
+      let rbtn = document.createElement("button");
+      rbtn.innerText = "Remove Task";
+      rbtn.setAttribute("id", "remove");
+      rbtn.onclick = () => {
+        remove(index);
+      };
+
+      let cbtn = document.createElement("button");
+      cbtn.innerText = "Completed";
+      cbtn.onclick = () => {
+        div.style.border = "1px solid green";
+        cbtn.style.border = "5px solid red";
+      };
+
+      div.append(p, rbtn, cbtn);
+      container.append(div);
+    });
+  };
+
+  function remove(index) {
+    let todo = JSON.parse(localStorage.getItem("data"));
+    todo.splice(index, 1);
+    localStorage.setItem("data", JSON.stringify(todo));
+    appendData(todo);
+  }
+
+  let arr = [4, 5465, 456654, 564, 54, 64, 4564];
+  // for (let i = 0; i < arr.length; i++) {
+  //   console.log(arr[i], i);
+  // }
+  arr.forEach((el, index) => {
+    console.log(el, index);
+  });
+</script>
